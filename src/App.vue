@@ -3485,7 +3485,8 @@ export default {
       wrongLetters: '',
       rightLetters: '',
       guessedWord: '',
-      choosenWord: ''
+      choosenWord: '',
+      allowedDigits: "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWYXZ",
     }
   },
 
@@ -3508,30 +3509,34 @@ export default {
     //para cada tecla pressionada, checa se existe na palavra escolhida
     onKeyPressed(e) {
 
-      //enquanto nao errou 6x (6 partes do corpo) nem acertou a palavra
-      if ((this.wrongLetters.length<6) && (this.guessedWord.length < this.choosenWord.length)) {
-        
-        if (!e) e = window.event
+      //verifica se o jogador digitou uma letra
+      if (this.allowedDigits.indexOf(e.key) > -1) {
 
-        //checa se jogador já não digitou essa mesma letra antes
-        if ((this.rightLetters.indexOf(e.key) <= -1) && (this.wrongLetters.indexOf(e.key) <= -1)) {
+        //enquanto nao errou 6x (6 partes do corpo) nem acertou a palavra
+        if ((this.wrongLetters.length<6) && (this.guessedWord.length < this.choosenWord.length)) {
+          
+          //if (!e) e = window.event
 
-          //jogador inseriu uma letra que consta na palavra escolhida
-          if (this.choosenWord.indexOf(e.key) > -1) {
+          //checa se jogador já não digitou essa mesma letra antes
+          if ((this.rightLetters.indexOf(e.key) <= -1) && (this.wrongLetters.indexOf(e.key) <= -1)) {
 
-            //mostra a letra em sua posição correta
-            for(let i=0; i<this.choosenWord.length;i++){
-              if (this.choosenWord[i] == e.key){
-                this.rightLetters = this.rightLetters.substr(0,i) + e.key + (this.rightLetters.substr(i+1))
-                this.guessedWord = this.guessedWord + e.key
+            //jogador inseriu uma letra que consta na palavra escolhida
+            if (this.choosenWord.indexOf(e.key) > -1) {
+
+              //mostra a letra em sua posição correta
+              for(let i=0; i<this.choosenWord.length;i++){
+                if (this.choosenWord[i] == e.key){
+                  this.rightLetters = this.rightLetters.substr(0,i) + e.key.toUpperCase() + (this.rightLetters.substr(i+1))
+                  this.guessedWord = this.guessedWord + e.key.toUpperCase()
+                }
               }
             }
-          }
 
-          //jogador inseriu uma letra que nao consta na palavra escolhida
-          else {
-            this.wrongLetters = this.wrongLetters + e.key
-            }
+            //jogador inseriu uma letra que nao consta na palavra escolhida
+            else {
+              this.wrongLetters = this.wrongLetters + e.key.toUpperCase()
+              }
+          }
         }
       }
     }
